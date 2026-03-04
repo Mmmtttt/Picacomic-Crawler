@@ -127,7 +127,7 @@ class PicaDownloader(DownloadCallback):
         current_page = 1
 
         while True:
-            page_data = self.client.picture(episode.comic_id, episode._id, current_page).json()
+            page_data = self.client.picture(episode.comic_id, episode.order, current_page).json()
 
             if 'data' not in page_data or 'pages' not in page_data['data']:
                 break

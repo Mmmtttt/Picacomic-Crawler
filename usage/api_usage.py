@@ -50,6 +50,21 @@ def main():
         print(f"{i}. {comic['title']}")
         print(f"   作者: {comic['author']}")
     
+    # 4. 下载漫画（可选演示）
+    print(f"\n\n4. 下载漫画演示（可选，已注释）")
+    print("-" * 60)
+    print("注意：取消下面代码的注释可测试下载功能")
+    print("会自动下载到 config.json 中配置的 download_dir 目录")
+    print()
+    # if result['results']:
+    #     first_comic_id = result['results'][0]['comic_id']
+    #     print(f"正在下载漫画: {first_comic_id}...")
+    #     detail, success = picacomic_api.download_album(first_comic_id, show_progress=True)
+    #     if success:
+    #         print(f"✅ 下载成功！漫画标题: {detail['title']}")
+    #     else:
+    #         print(f"❌ 下载失败")
+    
     print("\n\n" + "=" * 60)
     print("✅ 使用示例完成！")
     print("=" * 60)
