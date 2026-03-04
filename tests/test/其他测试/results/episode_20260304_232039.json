@@ -1,0 +1,23 @@
+{
+  "timestamp": "2026-03-04T23:20:39.094657",
+  "test_type": "episode",
+  "total_tests": 1,
+  "passed_tests": 1,
+  "failed_tests": 0,
+  "results": [
+    {
+      "test_name": "测试章节 - 获取漫画所有章节",
+      "test_type": "episode",
+      "success": true,
+      "error": null,
+      "duration": 0.11,
+      "message": "测试成功",
+      "data": {
+        "comic_id": "6995f1e2fd418a66e0d38885",
+        "total_episodes": 14
+      },
+      "start_time": "2026-03-04T23:20:38.978124",
+      "end_time": "2026-03-04T23:20:39.089199"
+    }
+  ]
+}

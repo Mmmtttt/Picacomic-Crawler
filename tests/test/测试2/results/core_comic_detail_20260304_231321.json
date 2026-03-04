@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-03-04T23:13:21.861681",
+  "test_type": "core_comic_detail",
+  "total_tests": 1,
+  "passed_tests": 1,
+  "failed_tests": 0,
+  "results": [
+    {
+      "test_name": "【核心功能2】获取漫画详情",
+      "test_type": "core_comic_detail",
+      "success": true,
+      "error": null,
+      "duration": 0.2,
+      "message": "测试成功",
+      "data": {
+        "comic_id": "6995f1e2fd418a66e0d38885",
+        "title": "因為遺言暫時延後死去這件事",
+        "author": "Sorim&HYEON",
+        "eps_count": 14,
+        "pages_count": 955,
+        "categories_count": 4
+      },
+      "start_time": "2026-03-04T23:13:21.017862",
+      "end_time": "2026-03-04T23:13:21.220204"
+    }
+  ]
+}

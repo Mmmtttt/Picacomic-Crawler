@@ -1,0 +1,20 @@
+{
+  "timestamp": "2026-03-04T23:01:54.370397",
+  "test_type": "core_search_comics",
+  "total_tests": 1,
+  "passed_tests": 0,
+  "failed_tests": 1,
+  "results": [
+    {
+      "test_name": "【核心功能1】搜索漫画 - 纯爱前20个",
+      "test_type": "core_search_comics",
+      "success": false,
+      "error": "PICA_ACCOUNT/PICA_PASSWORD ERROR",
+      "duration": 0.35,
+      "message": "",
+      "data": {},
+      "start_time": "2026-03-04T23:01:53.161933",
+      "end_time": "2026-03-04T23:01:53.514060"
+    }
+  ]
+}

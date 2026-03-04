@@ -1,0 +1,24 @@
+{
+  "timestamp": "2026-03-04T23:03:46.492779",
+  "test_type": "core_episodes",
+  "total_tests": 1,
+  "passed_tests": 1,
+  "failed_tests": 0,
+  "results": [
+    {
+      "test_name": "【核心功能3】获取漫画章节",
+      "test_type": "core_episodes",
+      "success": true,
+      "error": null,
+      "duration": 0.13,
+      "message": "测试成功",
+      "data": {
+        "comic_id": "6995f1e2fd418a66e0d38885",
+        "total_episodes": 14,
+        "first_episode_title": "第1話"
+      },
+      "start_time": "2026-03-04T23:03:46.360183",
+      "end_time": "2026-03-04T23:03:46.490582"
+    }
+  ]
+}
