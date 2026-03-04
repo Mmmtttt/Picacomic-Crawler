@@ -169,7 +169,7 @@ def download_album(comic_id: str, download_dir: str = None,
 
 def get_favorite_comics(option: PicaOption = None) -> Dict:
     """
-    获取用户收藏夹
+    获取用户收藏夹（所有页）
     
     Args:
         option: Picacomic配置选项
@@ -181,26 +181,190 @@ def get_favorite_comics(option: PicaOption = None) -> Dict:
         option = get_option()
     
     client = option.build_client()
-    favorites_data = client.favorite()
+    all_comics = client.favorite_all()
     
-    comics = []
-    if favorites_data and 'data' in favorites_data and 'comics' in favorites_data['data']:
-        docs = favorites_data['data']['comics'].get('docs', [])
-        comics = [
-            {
-                "comic_id": comic.get("_id", ""),
-                "title": comic.get("title", ""),
-                "author": comic.get("author", ""),
-                "categories": comic.get("categories", []),
-                "tags": comic.get("tags", [])
-            }
-            for comic in docs
-        ]
+    comics = [
+        {
+            "comic_id": comic.get("_id", ""),
+            "title": comic.get("title", ""),
+            "author": comic.get("author", ""),
+            "categories": comic.get("categories", []),
+            "tags": comic.get("tags", [])
+        }
+        for comic in all_comics
+    ]
     
     return {
         "total": len(comics),
         "comics": comics
     }
+
+
+def get_favorite_comics_full(option: PicaOption = None) -> Dict:
+    """
+    获取用户收藏夹并获取详细信息
+    
+    Args:
+        option: Picacomic配置选项
+    
+    Returns:
+        收藏夹信息字典（包含详细信息）
+    """
+    result = get_favorite_comics(option=option)
+    
+    if option is None:
+        option = get_option()
+    
+    detailed_comics = []
+    for i, item in enumerate(result['comics'], 1):
+        try:
+            detail = get_comic_detail(item['comic_id'], option=option)
+            detail['rank'] = i
+            detailed_comics.append(detail)
+        except Exception as e:
+            detailed_comics.append({
+                **item,
+                'rank': i,
+                'error': str(e)
+            })
+    
+    result['comics'] = detailed_comics
+    return result
+
+
+def search_comics_full(query: str, page: int = 1, max_pages: int = 1,
+                       option: PicaOption = None,
+                       start_index: int = None, end_index: int = None) -> Dict:
+    """
+    搜索漫画并获取详细信息
+    
+    Args:
+        query: 搜索关键词
+        page: 起始页码
+        max_pages: 最大页数
+        option: Picacomic配置选项
+        start_index: 起始个数索引
+        end_index: 结束个数索引
+    
+    Returns:
+        搜索结果字典（包含详细信息）
+    """
+    result = search_comics(query, page=page, max_pages=max_pages, 
+                           option=option, start_index=start_index, end_index=end_index)
+    
+    if option is None:
+        option = get_option()
+    
+    detailed_results = []
+    for i, item in enumerate(result['results'], 1):
+        try:
+            detail = get_comic_detail(item['comic_id'], option=option)
+            detail['rank'] = i
+            detailed_results.append(detail)
+        except Exception as e:
+            detailed_results.append({
+                **item,
+                'rank': i,
+                'error': str(e)
+            })
+    
+    result['results'] = detailed_results
+    return result
+
+
+def download_cover(comic_id: str, save_path: str = None, 
+                   option: PicaOption = None, 
+                   show_progress: bool = True) -> Tuple[Dict, bool]:
+    """
+    下载漫画封面
+    
+    Args:
+        comic_id: 漫画ID
+        save_path: 保存路径（可选）
+        option: Picacomic配置选项
+        show_progress: 是否显示进度
+    
+    Returns:
+        (漫画详情字典, 是否成功)
+    """
+    if option is None:
+        option = get_option()
+    
+    detail_dict = get_comic_detail(comic_id, option=option)
+    cover_url = detail_dict.get('cover_url', '')
+    
+    if not cover_url:
+        if show_progress:
+            print(f"❌ 没有找到封面 URL")
+        return detail_dict, False
+    
+    if save_path is None:
+        config = load_config()
+        download_dir = config.get("download_dir", "pictures")
+        os.makedirs(download_dir, exist_ok=True)
+        save_path = os.path.join(download_dir, f"cover_{comic_id}.jpg")
+    
+    if show_progress:
+        print(f"正在下载封面...")
+        print(f"  封面 URL: {cover_url}")
+        print(f"  保存到: {save_path}")
+    
+    try:
+        client = option.build_client()
+        success = client.download_image(cover_url, save_path)
+        
+        if success and show_progress:
+            print(f"✅ 封面下载成功！")
+        
+        detail_dict['cover_save_path'] = save_path
+        return detail_dict, success
+    except Exception as e:
+        if show_progress:
+            print(f"❌ 封面下载失败: {e}")
+        return detail_dict, False
+
+
+def get_local_progress(comic_id: str, download_dir: str = None) -> int:
+    """
+    获取本地已下载的图片数量
+    
+    Args:
+        comic_id: 漫画ID
+        download_dir: 下载目录
+    
+    Returns:
+        已下载图片数量
+    """
+    config = load_config()
+    download_dir = download_dir or config.get("download_dir", "pictures")
+    
+    from picacomic import PicaOption, get_comic_detail
+    
+    option = PicaOption()
+    option.dir_rule.base_dir = os.path.abspath(download_dir)
+    
+    try:
+        detail = get_comic_detail(comic_id, option=option)
+        comic_dir = option.dir_rule.decide_comic_dirpath(
+            type('MockComic', (), {
+                'author': detail.get('author', 'unknown'),
+                'title': detail.get('title', 'unknown'),
+                'comic_id': comic_id
+            })()
+        )
+    except:
+        return 0
+    
+    if not os.path.exists(comic_dir):
+        return 0
+    
+    image_count = 0
+    for root, dirs, files in os.walk(comic_dir):
+        for file in files:
+            if file.endswith(('.jpg', '.jpeg', '.png', '.webp', '.gif')):
+                image_count += 1
+    
+    return image_count
 
 def load_database() -> Dict:
     """加载数据库"""

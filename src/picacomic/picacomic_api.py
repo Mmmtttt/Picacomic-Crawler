@@ -231,9 +231,18 @@ def get_comic_detail(comic_id: str, option=None) -> PicaComicDetail:
 
 
 def get_favorites(page: int = 1, option=None) -> Dict:
-    """获取收藏夹"""
+    """获取收藏夹（分页）"""
     if option is None:
         option = PicaOption.default()
 
     client = option.build_client()
     return client.favorite(page=page)
+
+
+def get_favorites_all(option=None) -> List[Dict]:
+    """获取所有收藏夹"""
+    if option is None:
+        option = PicaOption.default()
+
+    client = option.build_client()
+    return client.favorite_all()

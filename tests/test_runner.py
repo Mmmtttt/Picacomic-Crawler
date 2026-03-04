@@ -48,6 +48,7 @@ from test_config import (
     SEARCH_TESTS,
     COMIC_DETAIL_TESTS,
     EPISODE_TESTS,
+    FAVORITES_TESTS,
     DOWNLOAD_TESTS,
     OPTION_TESTS,
     RESULT_CONFIG,
@@ -317,6 +318,25 @@ class TestRunner:
             "success": success
         }
 
+    def test_favorites(self, option, config: Dict) -> Dict:
+        """测试收藏夹"""
+        sys.path.insert(0, str(project_root))
+        import picacomic_api
+
+        get_full_info = config.get("get_full_info", False)
+        
+        if get_full_info:
+            result = picacomic_api.get_favorite_comics_full(option=option)
+        else:
+            result = picacomic_api.get_favorite_comics(option=option)
+        
+        return {
+            "total": result.get("total", 0),
+            "count": len(result.get("comics", [])),
+            "get_full_info": get_full_info,
+            "comics": result.get("comics", [])
+        }
+
     def test_option(self, option, config: Dict) -> Dict:
         """测试配置文件"""
         from picacomic import create_option
@@ -364,6 +384,9 @@ class TestRunner:
         if not test_filter or test_filter == "detail":
             self._run_tests(COMIC_DETAIL_TESTS, self.test_comic_detail, "comic_detail")
             self._run_tests(EPISODE_TESTS, self.test_episode, "episode")
+
+        if not test_filter or test_filter == "favorites":
+            self._run_tests(FAVORITES_TESTS, self.test_favorites, "favorites")
 
         if not test_filter or test_filter == "download":
             self._run_tests(DOWNLOAD_TESTS, self.test_download, "download")
@@ -522,6 +545,7 @@ def main():
     parser.add_argument("--list", action="store_true", help="列出所有测试项")
     parser.add_argument("--search", action="store_true", help="只运行搜索相关测试")
     parser.add_argument("--detail", action="store_true", help="只运行详情相关测试")
+    parser.add_argument("--favorites", action="store_true", help="只运行收藏夹测试")
     parser.add_argument("--download", action="store_true", help="只运行下载相关测试")
     parser.add_argument("--option", action="store_true", help="只运行配置相关测试")
 
@@ -557,6 +581,8 @@ def main():
         test_filter = "search"
     elif args.detail:
         test_filter = "detail"
+    elif args.favorites:
+        test_filter = "favorites"
     elif args.download:
         test_filter = "download"
     elif args.option:
