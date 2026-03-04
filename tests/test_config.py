@@ -116,11 +116,10 @@ EPISODE_TESTS = [
 # 下载测试
 DOWNLOAD_TESTS = [
     {
-        "name": "测试下载 - 单张图片",
-        "comic_id": "6995f1e2fd418a66e0d38885",  # 需要替换为实际的漫画ID
-        "episode_id": "",  # 需要替换为实际的章节ID
+        "name": "测试下载 - 完整漫画",
+        "comic_id": "6995f1e2fd418a66e0d38885",
         "download_dir": "test_output/downloads",
-        "enabled": False,  # 默认关闭，避免大量下载
+        "enabled": True,  # 默认关闭，避免大量下载
     },
 ]
 

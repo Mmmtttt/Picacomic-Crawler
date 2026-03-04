@@ -298,17 +298,23 @@ class TestRunner:
 
     def test_download(self, option, config: Dict) -> Dict:
         """测试下载"""
-        from picacomic import new_downloader
+        sys.path.insert(0, str(project_root))
+        import picacomic_api
 
-        downloader = new_downloader(option=option)
-        episode = downloader.download_episode(
+        detail_dict, success = picacomic_api.download_album(
             comic_id=config["comic_id"],
-            episode_id=config["episode_id"]
+            download_dir=config.get("download_dir"),
+            option=option,
+            show_progress=False
         )
+        
         return {
             "comic_id": config["comic_id"],
-            "episode_id": config["episode_id"],
-            "pages_count": episode.pages_count,
+            "title": detail_dict.get("title"),
+            "author": detail_dict.get("author"),
+            "eps_count": detail_dict.get("eps_count"),
+            "pages_count": detail_dict.get("pages_count"),
+            "success": success
         }
 
     def test_option(self, option, config: Dict) -> Dict:

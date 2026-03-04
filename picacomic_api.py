@@ -60,7 +60,7 @@ def get_option(account: str = None, password: str = None) -> PicaOption:
     _option = PicaOption()
     _option.client['account'] = account
     _option.client['password'] = password
-    _option.download['dir'] = config.get("download_dir", "pictures")
+    _option.dir_rule.base_dir = os.path.abspath(config.get("download_dir", "pictures"))
     
     return _option
 
@@ -145,7 +145,7 @@ def download_album(comic_id: str, download_dir: str = None,
     if option is None:
         option = get_option()
     
-    option.download['dir'] = download_dir
+    option.dir_rule.base_dir = os.path.abspath(download_dir)
     
     if show_progress:
         print(f"正在获取漫画 {comic_id} 的信息...")
