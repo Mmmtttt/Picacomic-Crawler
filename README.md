@@ -14,7 +14,11 @@ pip install -e .
 - ✅ 获取漫画详情（包括标签、分类、描述等）
 - ✅ 获取漫画章节
 - ✅ 下载漫画/章节
-- ✅ 获取收藏夹
+- ✅ 下载漫画封面
+- ✅ 获取收藏夹（所有页）
+- ✅ 获取收藏夹详细信息
+- ✅ 搜索并获取详细信息
+- ✅ 获取本地下载进度
 - ✅ 用户只需要配置账号和密码，其他自动处理
 
 ## 使用
@@ -79,7 +83,54 @@ config_dict = {
 option = create_option_by_dict(config_dict)
 ```
 
-### 5. 配置文件 (option.yml)
+### 5. 下载漫画封面
+
+```python
+import picacomic_api
+
+# 下载封面到默认位置
+detail, success = picacomic_api.download_cover('comic_id')
+
+# 或指定保存路径
+detail, success = picacomic_api.download_cover(
+    comic_id='comic_id',
+    save_path='custom_path/cover.jpg'
+)
+```
+
+### 6. 获取收藏夹
+
+```python
+import picacomic_api
+
+# 获取所有收藏夹漫画
+result = picacomic_api.get_favorite_comics()
+print(f"收藏夹总数: {result['total']}")
+
+# 获取所有收藏夹漫画 + 详细信息
+result = picacomic_api.get_favorite_comics_full()
+```
+
+### 7. 搜索并获取详细信息
+
+```python
+import picacomic_api
+
+# 搜索并直接获取每个漫画的详细信息
+result = picacomic_api.search_comics_full('纯爱', max_pages=1)
+```
+
+### 8. 获取本地下载进度
+
+```python
+import picacomic_api
+
+# 查看本地已下载了多少张图片
+local_count = picacomic_api.get_local_progress('comic_id')
+print(f"本地已下载: {local_count} 张图片")
+```
+
+### 9. 配置文件 (option.yml)
 
 ```yaml
 client:
@@ -136,6 +187,12 @@ plugins:
 }
 ```
 
+### `search_comics_full(query, page=1, max_pages=1, option=None, start_index=None, end_index=None)`
+
+搜索漫画并获取详细信息
+
+- 同 `search_comics`，但返回的结果包含每个漫画的详细信息
+
 ### `get_comic_detail(comic_id, option=None)`
 
 获取漫画详情
@@ -143,24 +200,82 @@ plugins:
 - **comic_id**: 漫画ID
 - **option**: Picacomic配置选项
 
-返回 `PicaComicDetail` 对象，包含：
-- `title`: 标题
-- `author`: 作者
-- `eps_count`: 章节数
-- `pages_count`: 总页数
-- `categories`: 分类列表
-- `tags`: 标签列表
-- `description`: 描述
-- `cover_url`: 封面URL
-- 更多...
+返回漫画详情字典：
+```python
+{
+    "comic_id": "漫画ID",
+    "title": "标题",
+    "author": "作者",
+    "eps_count": 章节数,
+    "pages_count": 总页数,
+    "categories": ["分类列表"],
+    "tags": ["标签列表"],
+    "description": "描述",
+    "cover_url": "封面URL",
+    "likes_count": 点赞数,
+    "total_views": 浏览数,
+    "finished": 是否完结
+}
+```
 
-### `download_album(pic_comic_id, option=None, downloader=None)`
+### `download_album(comic_id, download_dir=None, option=None, show_progress=True)`
 
 下载漫画
 
-- **pic_comic_id**: 漫画ID
+- **comic_id**: 漫画ID
+- **download_dir**: 下载目录（可选）
 - **option**: Picacomic配置选项
-- **downloader**: 下载器类
+- **show_progress**: 是否显示进度
+
+返回 (漫画详情字典, 是否成功)
+
+### `download_cover(comic_id, save_path=None, option=None, show_progress=True)`
+
+下载漫画封面
+
+- **comic_id**: 漫画ID
+- **save_path**: 保存路径（可选）
+- **option**: Picacomic配置选项
+- **show_progress**: 是否显示进度
+
+返回 (漫画详情字典, 是否成功)
+
+### `get_favorite_comics(option=None)`
+
+获取所有收藏夹漫画
+
+- **option**: Picacomic配置选项
+
+返回收藏夹信息字典：
+```python
+{
+    "total": 收藏总数,
+    "comics": [
+        {
+            "comic_id": "漫画ID",
+            "title": "标题",
+            "author": "作者",
+            "categories": ["分类列表"],
+            "tags": ["标签列表"]
+        }
+    ]
+}
+```
+
+### `get_favorite_comics_full(option=None)`
+
+获取所有收藏夹漫画并获取详细信息
+
+- 同 `get_favorite_comics`，但返回的结果包含每个漫画的详细信息
+
+### `get_local_progress(comic_id, download_dir=None)`
+
+获取本地已下载的图片数量
+
+- **comic_id**: 漫画ID
+- **download_dir**: 下载目录（可选）
+
+返回已下载图片数量
 
 ## 测试
 
@@ -177,6 +292,15 @@ python test_runner.py
 python test_runner.py --core
 ```
 
+运行特定类型的测试：
+
+```bash
+python test_runner.py --search    # 只运行搜索相关测试
+python test_runner.py --detail    # 只运行详情相关测试
+python test_runner.py --favorites # 只运行收藏夹测试
+python test_runner.py --download  # 只运行下载相关测试
+```
+
 列出所有测试项：
 
 ```bash
@@ -190,13 +314,17 @@ Picacomic-Crawler/
 ├── README.md                    # 文档
 ├── setup.py                     # 打包配置
 ├── pyproject.toml               # 项目配置
+├── config.json                  # 统一配置文件
 ├── assets/
 │   └── option/
 │       └── option_example.yml   # 配置示例
 ├── src/
 │   └── picacomic/               # 核心库代码
 ├── tests/                        # 测试代码
-└── usage/                        # 使用示例
-    ├── simple_usage.py          # 简单使用示例
-    └── workflow_download.py     # 工作流示例
+├── usage/                        # 使用示例
+│   ├── simple_usage.py          # 简单使用示例
+│   ├── workflow_download.py     # 工作流示例
+│   ├── download_usage.py        # 下载功能示例
+│   └── advanced_usage.py        # 高级功能示例
+└── picacomic_api.py             # 统一 API 接口
 ```

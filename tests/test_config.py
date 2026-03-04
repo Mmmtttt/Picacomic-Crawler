@@ -113,11 +113,24 @@ EPISODE_TESTS = [
     },
 ]
 
+# 收藏夹测试
+FAVORITES_TESTS = [
+    {
+        "name": "测试收藏夹 - 获取所有收藏漫画",
+        "enabled": False,  # 默认关闭，需要登录
+    },
+    {
+        "name": "测试收藏夹 - 获取所有收藏漫画（详细信息）",
+        "get_full_info": True,
+        "enabled": True,  # 默认关闭，需要登录
+    },
+]
+
 # 下载测试
 DOWNLOAD_TESTS = [
     {
         "name": "测试下载 - 完整漫画",
-        "comic_id": "6995f1e2fd418a66e0d38885",
+        "comic_id": "63b19b15c8f7a36d251e5535",
         "download_dir": "test_output/downloads",
         "enabled": True,  # 默认关闭，避免大量下载
     },
@@ -206,6 +219,7 @@ def get_test_summary() -> dict:
         "search": len(get_enabled_tests(SEARCH_TESTS)),
         "comic_detail": len(get_enabled_tests(COMIC_DETAIL_TESTS)),
         "episode": len(get_enabled_tests(EPISODE_TESTS)),
+        "favorites": len(get_enabled_tests(FAVORITES_TESTS)),
         "download": len(get_enabled_tests(DOWNLOAD_TESTS)),
         "option": len(get_enabled_tests(OPTION_TESTS)),
     }

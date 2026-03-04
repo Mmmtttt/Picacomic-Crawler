@@ -170,3 +170,30 @@ class PicaClient(PicaClientInterface):
         else:
             url = f"{self.base_url}users/favourite?page={page}"
             return self.http_do("GET", url=url).json()
+    
+    def favorite_all(self) -> List[Dict]:
+        """获取所有收藏夹漫画"""
+        all_comics = []
+        current_page = 1
+        
+        while True:
+            page_data = self.favorite(page=current_page)
+            
+            if not page_data or 'data' not in page_data or 'comics' not in page_data['data']:
+                break
+            
+            comics_data = page_data['data']['comics']
+            docs = comics_data.get('docs', [])
+            
+            if not docs:
+                break
+            
+            all_comics.extend(docs)
+            
+            total_pages = comics_data.get('pages', 1)
+            if current_page >= total_pages:
+                break
+            
+            current_page += 1
+        
+        return all_comics
