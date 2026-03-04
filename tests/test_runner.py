@@ -183,12 +183,15 @@ class TestRunner:
             start_index=config.get("start"),
             end_index=config.get("end"),
         )
+        first_comic = result["results"][0] if result.get("results") else None
         return {
             "keyword": config["keyword"],
             "page": config.get("page", 1),
             "total": result.get("total", 0),
             "count": len(result.get("results", [])),
-            "first_title": result["results"][0].get("title", "")[:50] if result.get("results") else None,
+            "first_title": first_comic.get("title", "")[:50] if first_comic else None,
+            "first_categories": first_comic.get("categories", []) if first_comic else [],
+            "first_tags": first_comic.get("tags", []) if first_comic else [],
         }
 
     def test_core_comic_detail(self, option, config: Dict) -> Dict:
@@ -206,6 +209,9 @@ class TestRunner:
             "eps_count": detail.eps_count,
             "pages_count": detail.pages_count,
             "categories_count": len(detail.categories),
+            "categories": detail.categories,
+            "tags_count": len(detail.tags),
+            "tags": detail.tags,
         }
 
     def test_core_episodes(self, option, config: Dict) -> Dict:
@@ -256,10 +262,13 @@ class TestRunner:
             max_pages=config.get("max_pages", 1),
             option=option
         )
+        first_comic = result["results"][0] if result.get("results") else None
         return {
             "keyword": config["keyword"],
             "count": len(result.get("results", [])),
             "total": result.get("total", 0),
+            "first_categories": first_comic.get("categories", []) if first_comic else [],
+            "first_tags": first_comic.get("tags", []) if first_comic else [],
         }
 
     def test_comic_detail(self, option, config: Dict) -> Dict:
@@ -272,6 +281,8 @@ class TestRunner:
             "title": detail.title,
             "author": detail.author,
             "eps_count": detail.eps_count,
+            "categories": detail.categories,
+            "tags": detail.tags,
         }
 
     def test_episode(self, option, config: Dict) -> Dict:
