@@ -1,0 +1,123 @@
+{
+  "timestamp": "2026-03-04T23:18:01.725058",
+  "total_tests": 7,
+  "passed_tests": 6,
+  "failed_tests": 1,
+  "results_by_type": {
+    "core_search_comics": 1,
+    "core_comic_detail": 1,
+    "core_episodes": 1,
+    "search": 1,
+    "comic_detail": 1,
+    "episode": 1,
+    "option": 1
+  },
+  "all_results": [
+    {
+      "test_name": "【核心功能1】搜索漫画 - 纯爱前20个",
+      "test_type": "core_search_comics",
+      "success": true,
+      "error": null,
+      "duration": 0.47,
+      "message": "测试成功",
+      "data": {
+        "keyword": "野際かえで",
+        "page": 1,
+        "total": 30,
+        "count": 20,
+        "first_title": "COMIC BAVEL 2021年1月号"
+      },
+      "start_time": "2026-03-04T23:18:00.417925",
+      "end_time": "2026-03-04T23:18:00.888455"
+    },
+    {
+      "test_name": "【核心功能2】获取漫画详情",
+      "test_type": "core_comic_detail",
+      "success": true,
+      "error": null,
+      "duration": 0.19,
+      "message": "测试成功",
+      "data": {
+        "comic_id": "6539168bbbbc38498badcce5",
+        "title": "おもちゃの人生",
+        "author": "野際かえで",
+        "eps_count": 1,
+        "pages_count": 245,
+        "categories_count": 2
+      },
+      "start_time": "2026-03-04T23:18:00.889144",
+      "end_time": "2026-03-04T23:18:01.080142"
+    },
+    {
+      "test_name": "【核心功能3】获取漫画章节",
+      "test_type": "core_episodes",
+      "success": true,
+      "error": null,
+      "duration": 0.2,
+      "message": "测试成功",
+      "data": {
+        "comic_id": "6539168bbbbc38498badcce5",
+        "total_episodes": 1,
+        "first_episode_title": "第1話"
+      },
+      "start_time": "2026-03-04T23:18:01.080531",
+      "end_time": "2026-03-04T23:18:01.279517"
+    },
+    {
+      "test_name": "测试搜索 - 纯爱",
+      "test_type": "search",
+      "success": true,
+      "error": null,
+      "duration": 0.21,
+      "message": "测试成功",
+      "data": {
+        "keyword": "纯爱",
+        "count": 20,
+        "total": 2287
+      },
+      "start_time": "2026-03-04T23:18:01.280324",
+      "end_time": "2026-03-04T23:18:01.490414"
+    },
+    {
+      "test_name": "测试漫画详情",
+      "test_type": "comic_detail",
+      "success": true,
+      "error": null,
+      "duration": 0.13,
+      "message": "测试成功",
+      "data": {
+        "comic_id": "6995f1e2fd418a66e0d38885",
+        "title": "因為遺言暫時延後死去這件事",
+        "author": "Sorim&HYEON",
+        "eps_count": 14
+      },
+      "start_time": "2026-03-04T23:18:01.490840",
+      "end_time": "2026-03-04T23:18:01.618435"
+    },
+    {
+      "test_name": "测试章节 - 获取漫画所有章节",
+      "test_type": "episode",
+      "success": true,
+      "error": null,
+      "duration": 0.1,
+      "message": "测试成功",
+      "data": {
+        "comic_id": "6995f1e2fd418a66e0d38885",
+        "total_episodes": 14
+      },
+      "start_time": "2026-03-04T23:18:01.619263",
+      "end_time": "2026-03-04T23:18:01.714486"
+    },
+    {
+      "test_name": "测试配置文件加载",
+      "test_type": "option",
+      "success": false,
+      "error": "配置文件不存在: D:\\code\\javdb\\picacomic_crawler\\new_picacomic_lib\\tests\\assets\\option\\option_example.yml",
+      "duration": 0.0,
+      "message": "",
+      "data": {},
+      "start_time": "2026-03-04T23:18:01.714993",
+      "end_time": "2026-03-04T23:18:01.715709"
+    }
+  ]
+}

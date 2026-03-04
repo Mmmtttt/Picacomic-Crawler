@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools"]
+
+[project]
+name = "picacomic"
+authors = [{name = "Picacomic", email = "picacomic@example.com"}]
+description = "Python API For Picacomic (哔咔漫画)"
+readme = "README.md"
+requires-python = ">=3.7"
+license = {file = "LICENSE"}
+keywords=['python', 'picacomic', '哔咔漫画', 'NSFW']
+classifiers=[
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: MIT License",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Microsoft :: Windows",
+]
+dependencies = [
+    "requests>=2.25.0",
+    "Pillow>=8.0.0",
+    "PyYAML>=5.0.0",
+]
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://github.com/"
+Documentation = "https://github.com/"
+
+[project.scripts]
+picacomic = "picacomic.cl:main"
+
+[tool.setuptools.dynamic]
+version = {attr = "picacomic.__version__"}

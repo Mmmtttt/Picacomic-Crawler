@@ -1,0 +1,20 @@
+{
+  "timestamp": "2026-03-04T23:00:26.886420",
+  "test_type": "core_comic_detail",
+  "total_tests": 1,
+  "passed_tests": 0,
+  "failed_tests": 1,
+  "results": [
+    {
+      "test_name": "【核心功能2】获取漫画详情",
+      "test_type": "core_comic_detail",
+      "success": false,
+      "error": "PICA_ACCOUNT/PICA_PASSWORD ERROR",
+      "duration": 0.59,
+      "message": "",
+      "data": {},
+      "start_time": "2026-03-04T23:00:25.586822",
+      "end_time": "2026-03-04T23:00:26.179330"
+    }
+  ]
+}

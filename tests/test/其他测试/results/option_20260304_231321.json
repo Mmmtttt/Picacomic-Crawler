@@ -1,0 +1,20 @@
+{
+  "timestamp": "2026-03-04T23:13:21.865743",
+  "test_type": "option",
+  "total_tests": 1,
+  "passed_tests": 0,
+  "failed_tests": 1,
+  "results": [
+    {
+      "test_name": "测试配置文件加载",
+      "test_type": "option",
+      "success": false,
+      "error": "配置文件不存在: D:\\code\\javdb\\picacomic_crawler\\new_picacomic_lib\\tests\\assets\\option\\option_example.yml",
+      "duration": 0.0,
+      "message": "",
+      "data": {},
+      "start_time": "2026-03-04T23:13:21.854221",
+      "end_time": "2026-03-04T23:13:21.854841"
+    }
+  ]
+}

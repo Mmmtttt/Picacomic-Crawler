@@ -1,0 +1,46 @@
+{
+  "timestamp": "2026-03-04T23:00:26.887901",
+  "total_tests": 3,
+  "passed_tests": 0,
+  "failed_tests": 3,
+  "results_by_type": {
+    "core_search_comics": 1,
+    "core_comic_detail": 1,
+    "core_episodes": 1
+  },
+  "all_results": [
+    {
+      "test_name": "【核心功能1】搜索漫画 - 纯爱前20个",
+      "test_type": "core_search_comics",
+      "success": false,
+      "error": "PICA_ACCOUNT/PICA_PASSWORD ERROR",
+      "duration": 0.36,
+      "message": "",
+      "data": {},
+      "start_time": "2026-03-04T23:00:25.220991",
+      "end_time": "2026-03-04T23:00:25.584084"
+    },
+    {
+      "test_name": "【核心功能2】获取漫画详情",
+      "test_type": "core_comic_detail",
+      "success": false,
+      "error": "PICA_ACCOUNT/PICA_PASSWORD ERROR",
+      "duration": 0.59,
+      "message": "",
+      "data": {},
+      "start_time": "2026-03-04T23:00:25.586822",
+      "end_time": "2026-03-04T23:00:26.179330"
+    },
+    {
+      "test_name": "【核心功能3】获取漫画章节",
+      "test_type": "core_episodes",
+      "success": false,
+      "error": "PICA_ACCOUNT/PICA_PASSWORD ERROR",
+      "duration": 0.7,
+      "message": "",
+      "data": {},
+      "start_time": "2026-03-04T23:00:26.182064",
+      "end_time": "2026-03-04T23:00:26.882391"
+    }
+  ]
+}
