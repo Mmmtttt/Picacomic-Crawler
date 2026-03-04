@@ -38,6 +38,8 @@ def example_usage():
     print(f"当前页结果数: {len(result['results'])}")
     for i, comic in enumerate(result['results'][:5], 1):
         print(f"{i}. {comic['title']} - {comic['author']}")
+        print(f"   分类: {comic.get('categories', [])}")
+        print(f"   标签: {comic.get('tags', [])}")
     
     # 获取第一个漫画的详情
     if result['results']:
@@ -47,6 +49,9 @@ def example_usage():
         print(f"标题: {detail.title}")
         print(f"作者: {detail.author}")
         print(f"章节数: {detail.eps_count}")
+        print(f"分类: {detail.categories}")
+        print(f"标签: {detail.tags}")
+        print(f"描述: {detail.description[:100]}..." if detail.description else "")
     
     # 方式2：通过字典配置
     print("\n\n【方式2】通过字典配置")
