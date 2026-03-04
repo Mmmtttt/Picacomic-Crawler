@@ -21,14 +21,16 @@ def example_usage():
     print("Picacomic API 简单使用示例")
     print("=" * 60)
     
-    # 方式1：直接配置
-    print("\n【方式1】直接通过代码配置账号密码")
+    # 方式1：通过 config.json 配置（推荐）
+    print("\n【方式1】通过 config.json 配置（推荐）")
     print("-" * 60)
     
-    # 创建配置，只需要配置账号和密码！
-    option = PicaOption()
-    option.client['account'] = "REDACTED_USERNAME"
-    option.client['password'] = "REDACTED_PASSWORD"
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).parent.parent))
+    import picacomic_api
+    
+    option = picacomic_api.get_option()
     
     # 搜索漫画
     print("\n正在搜索漫画: 纯爱...")
@@ -53,17 +55,13 @@ def example_usage():
         print(f"标签: {detail.tags}")
         print(f"描述: {detail.description[:100]}..." if detail.description else "")
     
-    # 方式2：通过字典配置
-    print("\n\n【方式2】通过字典配置")
+    # 方式2：直接通过代码配置
+    print("\n\n【方式2】直接通过代码配置")
     print("-" * 60)
     
-    config_dict = {
-        'client': {
-            'account': "REDACTED_USERNAME",
-            'password': "REDACTED_PASSWORD"
-        }
-    }
-    option2 = create_option_by_dict(config_dict)
+    option2 = PicaOption()
+    option2.client['account'] = "your_account"
+    option2.client['password'] = "your_password"
     
     # 再次搜索
     print("\n正在搜索漫画: 全彩...")

@@ -117,13 +117,11 @@ class TestRunner:
     def init_api(self):
         """初始化 API"""
         try:
-            from picacomic import PicaOption
+            # 使用 picacomic_api.py 从 config.json 读取配置
+            sys.path.insert(0, str(project_root))
+            import picacomic_api
             
-            # 直接使用正确的账号密码
-            self.option = PicaOption()
-            self.option.client['account'] = "REDACTED_USERNAME"
-            self.option.client['password'] = "REDACTED_PASSWORD"
-            self.option.client['secret_key'] = "~d}$Q7$eIni=V)9\\RK/P.RM4;9[7|@/CA}b~OW!3?EV`:<>M7pddUBL5n|0/*Cn"
+            self.option = picacomic_api.get_option()
             
             return True
         except Exception as e:
