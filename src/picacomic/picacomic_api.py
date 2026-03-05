@@ -180,12 +180,16 @@ def search_comics(query: str, page: int = 1, max_pages: int = 1,
             break
 
         for comic in search_page['data']['comics']['docs']:
+            cover_url = ''
+            if 'thumb' in comic and 'fileServer' in comic['thumb'] and 'path' in comic['thumb']:
+                cover_url = comic['thumb']['fileServer'] + '/static/' + comic['thumb']['path']
             all_results.append({
                 "comic_id": comic['_id'],
                 "title": comic.get('title', ''),
                 "author": comic.get('author', ''),
                 "tags": comic.get('tags', []),
-                "categories": comic.get('categories', [])
+                "categories": comic.get('categories', []),
+                "cover_url": cover_url
             })
 
         if max_pages and current_page >= max_pages:
