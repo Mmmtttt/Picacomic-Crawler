@@ -35,17 +35,19 @@ class PicaDirRule:
 
     def decide_comic_dirpath(self, comic: PicaComicDetail) -> str:
         """决定漫画下载目录"""
+        from .picacomic_toolkit import fix_windir_name
         dir_path = self.dir_rule
-        dir_path = dir_path.replace('{author}', str(comic.author) if comic.author else 'unknown')
-        dir_path = dir_path.replace('{title}', str(comic.title) if comic.title else 'unknown')
-        dir_path = dir_path.replace('{comic_id}', str(comic.comic_id) if comic.comic_id else 'unknown')
+        dir_path = dir_path.replace('{author}', fix_windir_name(str(comic.author) if comic.author else 'unknown'))
+        dir_path = dir_path.replace('{title}', fix_windir_name(str(comic.title) if comic.title else 'unknown'))
+        dir_path = dir_path.replace('{comic_id}', fix_windir_name(str(comic.comic_id) if comic.comic_id else 'unknown'))
         dir_path = dir_path.replace('{episode_id}', '')
         return os.path.join(self.base_dir, dir_path)
 
     def decide_episode_dirpath(self, episode: PicaEpisodeDetail) -> str:
         """决定章节下载目录"""
+        from .picacomic_toolkit import fix_windir_name
         comic_dir = self.decide_comic_dirpath(episode.from_comic) if episode.from_comic else self.base_dir
-        return os.path.join(comic_dir, str(episode.title) if episode.title else str(episode.order))
+        return os.path.join(comic_dir, fix_windir_name(str(episode.title) if episode.title else str(episode.order)))
 
     def decide_image_filepath(self, image: PicaImageDetail) -> str:
         """决定图片下载路径"""
