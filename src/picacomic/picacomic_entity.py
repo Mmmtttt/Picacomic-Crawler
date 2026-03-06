@@ -48,6 +48,8 @@ class PicaComicDetail(PicaBaseEntity):
 
     @property
     def cover_url(self) -> str:
+        if 'fileServer' in self.thumb and 'path' in self.thumb:
+            return f"{self.thumb['fileServer']}/static/{self.thumb['path']}"
         return self.thumb.get('original', '')
 
     @property
