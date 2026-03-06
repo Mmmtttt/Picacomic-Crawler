@@ -130,7 +130,7 @@ FAVORITES_TESTS = [
 DOWNLOAD_TESTS = [
     {
         "name": "测试下载 - 完整漫画",
-        "comic_id": "63b19b15c8f7a36d251e5535",
+        "comic_id": "664f3e6abe69900a22122e2a",
         "download_dir": "test_output/downloads",
         "enabled": True,  # 默认关闭，避免大量下载
     },

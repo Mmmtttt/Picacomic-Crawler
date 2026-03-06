@@ -118,11 +118,6 @@ class PicaDownloader(DownloadCallback):
 
     def download_by_episode_detail(self, episode: PicaEpisodeDetail):
         """根据章节详情下载"""
-        self.option.call_plugin('before_episode', episode=episode)
-        self.before_episode(episode)
-        if episode.skip:
-            return
-
         image_urls = []
         current_page = 1
 
@@ -150,6 +145,11 @@ class PicaDownloader(DownloadCallback):
             image = PicaImageDetail(url, i, episode)
             images.append(image)
         episode.images = images
+
+        self.option.call_plugin('before_episode', episode=episode)
+        self.before_episode(episode)
+        if episode.skip:
+            return
 
         self.execute_on_condition(
             iter_objs=images,
