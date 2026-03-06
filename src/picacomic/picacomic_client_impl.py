@@ -31,7 +31,7 @@ class PicaClient(PicaClientInterface):
                  password: str = "",
                  secret_key: str = "~d}$Q7$eIni=V)9\\RK/P.RM4;9[7|@/CA}b~OW!3?EV`:<>M7pddUBL5n|0/*Cn",
                  base_url: str = "https://picaapi.picacomic.com/",
-                 timeout: int = 10):
+                 timeout: int = 30):
         self.__s = requests.session()
         self.__s.verify = False
         self.account = account
