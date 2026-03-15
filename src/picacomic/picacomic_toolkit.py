@@ -51,9 +51,14 @@ def fix_windir_name(name: Union[str, int]) -> str:
     """
     修复Windows文件名
     """
-    name = str(name)
+    name = str(name) if name is not None else ""
+    # Replace reserved characters first.
     name = re.sub(r'[\\/:*?"<>|]', '_', name)
-    return name
+    # Windows does not allow trailing spaces or dots in path components.
+    name = name.strip().rstrip(".")
+    # Collapse repeated whitespace to reduce accidental "different" names.
+    name = re.sub(r"\s+", " ", name)
+    return name or "unknown"
 
 
 def time_stamp() -> int:

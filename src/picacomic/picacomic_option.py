@@ -53,7 +53,10 @@ class PicaDirRule:
         """决定图片下载路径"""
         if image.from_episode:
             ep_dir = self.decide_episode_dirpath(image.from_episode)
-            os.makedirs(ep_dir, exist_ok=True)
+            try:
+                os.makedirs(ep_dir, exist_ok=True)
+            except Exception as e:
+                raise OSError(f'创建章节目录失败: [{ep_dir}]') from e
         else:
             ep_dir = self.base_dir
         return os.path.join(ep_dir, f"{image.img_file_name}{image.img_file_suffix}")

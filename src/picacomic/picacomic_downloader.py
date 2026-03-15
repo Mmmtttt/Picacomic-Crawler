@@ -52,6 +52,37 @@ class PicaDownloader(DownloadCallback):
     def __exit__(self, exc_type, exc_val, exc_tb):
         pass
 
+    def _image_context(self, image: Optional[PicaImageDetail]) -> str:
+        """构建图片任务上下文日志"""
+        if image is None:
+            return "image=<none>"
+
+        episode = image.from_episode
+        comic = episode.from_comic if episode else None
+        comic_id = comic._id if comic else (episode.comic_id if episode else '')
+        comic_title = comic.title if comic else ''
+        episode_id = episode._id if episode else ''
+        episode_title = episode.title if episode else ''
+        return (
+            f"comic_id=[{comic_id}], comic_title=[{comic_title}], "
+            f"episode_id=[{episode_id}], episode_title=[{episode_title}], "
+            f"image_index=[{image.index + 1}]"
+        )
+
+    def _log_image_task_error(self, image: Optional[PicaImageDetail], err: Exception, path: str = "", url: str = ""):
+        """输出图片任务错误日志，便于定位Windows路径问题"""
+        path_part = f", path=[{path}]" if path else ""
+        url_part = f", url=[{url}]" if url else ""
+        print(
+            f"图片任务失败: {self._image_context(image)}{path_part}{url_part}, "
+            f"error=[{type(err).__name__}: {err}]"
+        )
+        if isinstance(err, (FileNotFoundError, OSError, PermissionError)):
+            print(
+                "提示: 可能是Windows路径非法（尾随空格/点）、路径过长或目录权限问题，"
+                "请检查漫画标题/章节标题与目标目录。"
+            )
+
     def download_album(self, comic_id: str) -> PicaComicDetail:
         """下载漫画（album）"""
         return self.download_comic(comic_id)
@@ -162,7 +193,12 @@ class PicaDownloader(DownloadCallback):
 
     def download_by_image_detail(self, image: PicaImageDetail):
         """根据图片详情下载"""
-        img_save_path = self.option.decide_image_filepath(image)
+        try:
+            img_save_path = self.option.decide_image_filepath(image)
+        except Exception as e:
+            self._log_image_task_error(image, e, url=image.download_url)
+            self.download_failed_image.append((image, e))
+            return
 
         image.save_path = img_save_path
         image.exists = os.path.exists(img_save_path)
@@ -179,7 +215,9 @@ class PicaDownloader(DownloadCallback):
         success = self.client.download_image(image.download_url, img_save_path)
 
         if not success:
-            self.download_failed_image.append((image, Exception('下载失败')))
+            err = Exception('下载失败')
+            self.download_failed_image.append((image, err))
+            self._log_image_task_error(image, err, path=img_save_path, url=image.download_url)
 
         if self.progress_callback:
             self.progress_callback(
@@ -212,8 +250,13 @@ class PicaDownloader(DownloadCallback):
                         obj = futures[future]
                         if isinstance(obj, PicaImageDetail):
                             self.download_failed_image.append((obj, e))
+                            self._log_image_task_error(obj, e, path=getattr(obj, 'save_path', ''), url=obj.download_url)
                         elif isinstance(obj, PicaEpisodeDetail):
                             self.download_failed_episode.append((obj, e))
+                            print(
+                                f"章节任务失败: comic_id=[{obj.comic_id}], episode_id=[{obj._id}], "
+                                f"episode_title=[{obj.title}], error=[{type(e).__name__}: {e}]"
+                            )
 
     def do_filter(self, detail_list: List) -> List:
         """过滤下载项"""
@@ -230,8 +273,13 @@ class PicaDownloader(DownloadCallback):
                     obj = futures[future]
                     if isinstance(obj, PicaImageDetail):
                         self.download_failed_image.append((obj, e))
+                        self._log_image_task_error(obj, e, path=getattr(obj, 'save_path', ''), url=obj.download_url)
                     elif isinstance(obj, PicaEpisodeDetail):
                         self.download_failed_episode.append((obj, e))
+                        print(
+                            f"章节任务失败: comic_id=[{obj.comic_id}], episode_id=[{obj._id}], "
+                            f"episode_title=[{obj.title}], error=[{type(e).__name__}: {e}]"
+                        )
 
     @property
     def has_download_failures(self) -> bool:
