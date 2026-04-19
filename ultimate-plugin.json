@@ -1,0 +1,41 @@
+{
+  "protocol_version": "1.0",
+  "plugin": {
+    "id": "comic.picacomic",
+    "name": "Picacomic",
+    "version": "1.0.0",
+    "entrypoint": "./ultimate_provider.py:PicacomicProvider",
+    "config_key": "picacomic"
+  },
+  "media_types": ["comic"],
+  "capabilities": [
+    { "key": "catalog.search" },
+    { "key": "catalog.detail" },
+    { "key": "collection.favorites" },
+    { "key": "collection.favorites_basic" },
+    { "key": "asset.bundle.fetch" },
+    { "key": "asset.cover.fetch" },
+    { "key": "asset.preview.resolve" },
+    { "key": "storage.comic_dir.resolve" },
+    { "key": "health.query.status" }
+  ],
+  "configuration": {
+    "order": 20,
+    "label": "Picacomic",
+    "sections": [
+      {
+        "id": "basic",
+        "label": "基础配置",
+        "fields": [
+          { "key": "enabled", "label": "启用", "type": "boolean" },
+          { "key": "account", "label": "账号", "type": "text", "placeholder": "Picacomic 账号" },
+          { "key": "password", "label": "密码", "type": "password", "placeholder": "Picacomic 密码", "secret": true }
+        ]
+      }
+    ]
+  },
+  "compatibility": {
+    "legacy_adapter_name": "picacomic",
+    "legacy_platforms": ["PK"]
+  }
+}
