@@ -8,6 +8,24 @@
     "config_key": "picacomic"
   },
   "media_types": ["comic"],
+  "identity": {
+    "content_type": "comic",
+    "host_id_prefix": "PK",
+    "platform_label": "PK"
+  },
+  "presentation": {
+    "media_card": {
+      "cover": {
+        "aspect_ratio": "2 / 3",
+        "fit": "cover",
+        "path_mode": "remote_first"
+      },
+      "badge": {
+        "show_platform_label": true,
+        "label": "PK"
+      }
+    }
+  },
   "capabilities": [
     { "key": "catalog.search" },
     { "key": "catalog.detail" },
@@ -31,6 +49,25 @@
           { "key": "account", "label": "账号", "type": "text", "placeholder": "Picacomic 账号" },
           { "key": "password", "label": "密码", "type": "password", "placeholder": "Picacomic 密码", "secret": true }
         ]
+      }
+    ]
+  },
+  "storage": {
+    "data_dir_bindings": [
+      {
+        "config_field": "base_dir",
+        "relative_dir": "comic/{host_prefix}"
+      }
+    ]
+  },
+  "collections": {
+    "list_mode": "virtual_only",
+    "virtual_lists": [
+      {
+        "id": "favorites",
+        "name": "我的收藏",
+        "description": "平台收藏夹中的所有漫画",
+        "capability": "collection.favorites_basic"
       }
     ]
   },
