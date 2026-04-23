@@ -11,7 +11,8 @@
   "identity": {
     "content_type": "comic",
     "host_id_prefix": "PK",
-    "platform_label": "PK"
+    "platform_label": "PK",
+    "aliases": ["pk", "picacomic"]
   },
   "presentation": {
     "media_card": {
@@ -70,9 +71,5 @@
         "capability": "collection.favorites_basic"
       }
     ]
-  },
-  "compatibility": {
-    "legacy_adapter_name": "picacomic",
-    "legacy_platforms": ["PK"]
   }
 }
