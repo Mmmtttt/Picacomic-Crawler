@@ -20,7 +20,7 @@ from infrastructure.logger import error_logger
 from protocol.base import ProtocolProvider
 from third_party.credential_guard import get_adapter_credential_status
 
-from picacomic import PicaOption, new_downloader
+from picacomic import PicaDirRule, PicaOption, new_downloader
 from picacomic_api import (
     download_album as pica_download_album,
     download_cover as pica_download_cover,
@@ -50,8 +50,28 @@ class PicacomicProvider(ProtocolProvider):
         option.client["password"] = str((config or {}).get("password") or "").strip()
         resolved_base_dir = str(base_dir or (config or {}).get("base_dir") or "").strip()
         if resolved_base_dir:
-            option.dir_rule.base_dir = os.path.abspath(resolved_base_dir)
+            option.dir_rule = PicaDirRule("{author}/{title}", os.path.abspath(resolved_base_dir))
         return option
+
+    @staticmethod
+    def _resolve_storage_dir(base_dir: str, author: str, title: str, album_id: str) -> str:
+        normalized_base_dir = str(base_dir or "").strip()
+        normalized_author = str(author or "").strip()
+        normalized_title = str(title or "").strip()
+        normalized_album_id = str(album_id or "").strip()
+
+        if normalized_base_dir and normalized_author and normalized_title:
+            primary_path = os.path.join(normalized_base_dir, normalized_author, normalized_title)
+            legacy_path = os.path.join(normalized_base_dir, "comics", normalized_author, normalized_title)
+            if os.path.isdir(primary_path):
+                return primary_path
+            if os.path.isdir(legacy_path):
+                return legacy_path
+            return primary_path
+
+        if normalized_base_dir:
+            return os.path.join(normalized_base_dir, normalized_album_id)
+        return normalized_album_id
 
     @staticmethod
     def _convert_basic_to_meta_format(albums: List[Dict[str, Any]]) -> Dict[str, Any]:
@@ -198,15 +218,12 @@ class PicacomicProvider(ProtocolProvider):
 
     def execute(self, capability: str, params: Dict[str, Any], context: Dict[str, Any], config: Dict[str, Any]):
         if capability == "storage.comic_dir.resolve":
-            base_dir = str(params.get("base_dir") or "").strip()
-            author = str(params.get("author") or "").strip()
-            title = str(params.get("title") or "").strip()
-            album_id = str(params.get("album_id") or "").strip()
-            if base_dir and author and title:
-                return os.path.join(base_dir, "comics", author, title)
-            if base_dir:
-                return os.path.join(base_dir, album_id)
-            return album_id
+            return self._resolve_storage_dir(
+                base_dir=str(params.get("base_dir") or "").strip(),
+                author=str(params.get("author") or "").strip(),
+                title=str(params.get("title") or "").strip(),
+                album_id=str(params.get("album_id") or "").strip(),
+            )
 
         if capability == "asset.preview.resolve":
             return self._get_preview_image_urls(
