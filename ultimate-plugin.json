@@ -59,7 +59,14 @@
         "config_field": "base_dir",
         "relative_dir": "comic/{host_prefix}"
       }
-    ]
+    ],
+    "comic_dir": {
+      "template": "{author}/{title}",
+      "fallback_templates": [
+        "comics/{author}/{title}",
+        "{album_id}"
+      ]
+    }
   },
   "collections": {
     "list_mode": "virtual_only",
