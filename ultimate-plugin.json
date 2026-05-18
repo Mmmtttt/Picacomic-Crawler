@@ -78,5 +78,13 @@
         "capability": "collection.favorites_basic"
       }
     ]
+  },
+  "runtime": {
+    "python_paths": [".", "src"],
+    "vendor_path_templates": [
+      "vendor/python",
+      "vendor/python/{python_tag}",
+      "vendor/python/{python_tag}/{platform_tag}"
+    ]
   }
 }
