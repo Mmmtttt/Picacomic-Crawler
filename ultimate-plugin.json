@@ -41,6 +41,12 @@
   "configuration": {
     "order": 20,
     "label": "Picacomic",
+    "credential": {
+      "enabled_field": "enabled",
+      "required_fields": ["account", "password"],
+      "unconfigured_message": "PK 平台未配置账号或密码，不能使用该平台查询。",
+      "disabled_message": "PK 平台未启用，不能使用该平台查询。"
+    },
     "sections": [
       {
         "id": "basic",
