@@ -19,7 +19,7 @@ if CURRENT_DIR not in sys.path:
 from infrastructure.logger import error_logger
 from protocol.base import ProtocolProvider
 from protocol.credential_guard import get_adapter_credential_status
-from android_runtime import apply_platform_defaults
+from picacomic_android_runtime import apply_platform_defaults
 
 from picacomic import PicaDirRule, PicaOption, new_downloader
 from picacomic_api import (
