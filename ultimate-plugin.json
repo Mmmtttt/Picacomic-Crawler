@@ -85,6 +85,24 @@
       }
     ]
   },
+  "packaging": {
+    "android": {
+      "enabled": true,
+      "pip_options": ["--no-deps"],
+      "pip_requirements": [
+        "requests>=2.31.0",
+        "certifi>=2025.8.3",
+        "charset-normalizer>=3.4.0",
+        "idna>=3.10",
+        "urllib3>=2.0.0",
+        "PyYAML==6.0.3",
+        "chaquopy-libyaml>=0.2.5",
+        "Pillow==11.0.0",
+        "chaquopy-freetype>=2.9.1",
+        "chaquopy-libjpeg>=1.5.3"
+      ]
+    }
+  },
   "runtime": {
     "python_paths": [".", "src"],
     "vendor_path_templates": [

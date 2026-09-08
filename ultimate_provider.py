@@ -19,6 +19,7 @@ if CURRENT_DIR not in sys.path:
 from infrastructure.logger import error_logger
 from protocol.base import ProtocolProvider
 from protocol.credential_guard import get_adapter_credential_status
+from android_runtime import apply_platform_defaults
 
 from picacomic import PicaDirRule, PicaOption, new_downloader
 from picacomic_api import (
@@ -51,7 +52,7 @@ class PicacomicProvider(ProtocolProvider):
         resolved_base_dir = str(base_dir or (config or {}).get("base_dir") or "").strip()
         if resolved_base_dir:
             option.dir_rule = PicaDirRule("{author}/{title}", os.path.abspath(resolved_base_dir))
-        return option
+        return apply_platform_defaults(option)
 
     @staticmethod
     def _resolve_storage_dir(base_dir: str, author: str, title: str, album_id: str) -> str:
