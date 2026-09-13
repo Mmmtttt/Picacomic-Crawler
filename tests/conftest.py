@@ -1,0 +1,30 @@
+from __future__ import annotations
+
+import sys
+import types
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(ROOT / "src"))
+
+protocol = types.ModuleType("protocol")
+base = types.ModuleType("protocol.base")
+credential_guard = types.ModuleType("protocol.credential_guard")
+base.ProtocolProvider = object
+credential_guard.get_adapter_credential_status = lambda _name, config: {
+    "configured": bool((config or {}).get("account") and (config or {}).get("password")),
+    "missing_fields": [],
+}
+protocol.base = base
+protocol.credential_guard = credential_guard
+sys.modules.setdefault("protocol", protocol)
+sys.modules.setdefault("protocol.base", base)
+sys.modules.setdefault("protocol.credential_guard", credential_guard)
+
+logger = types.ModuleType("infrastructure.logger")
+logger.error_logger = types.SimpleNamespace(error=lambda *args, **kwargs: None)
+infrastructure = types.ModuleType("infrastructure")
+infrastructure.logger = logger
+sys.modules.setdefault("infrastructure", infrastructure)
+sys.modules.setdefault("infrastructure.logger", logger)
